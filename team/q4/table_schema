@@ -1,0 +1,22 @@
+use phase3
+drop table q4table;
+CREATE TABLE `q4table` (
+  `tweetid` BIGINT NOT NULL,
+  `userid` varchar(500),
+  `username` varchar(500),
+  `timestamp` varchar(500),
+  `text` varchar(800),
+  `hashtag` varchar(500),
+  `ip` varchar(500),
+  `coordinates` varchar(500),
+  `repliedby` varchar(500),
+  `reply_count` varchar(500),
+  `mentioned` varchar(500),
+  `mentioned_count` varchar(500),
+  `favoritedby` varchar(500),
+  `favorite_count` varchar(500),
+  `useragent` varchar(500),
+  `filter_level` varchar(500),
+  `lang` varchar(500),
+  PRIMARY KEY (`tweetid`)
+);

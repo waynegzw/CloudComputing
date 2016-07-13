@@ -1,0 +1,15 @@
+azure storage blob copy show --account-name zhangweiccproj --account-key YktbOXHytQjJJeMXH7tZVMq0aOyoX2kqc41ZyTXTI/eK3i/NYJPSQ6IvRNBkroFerAol8sefXTa6WfeYDKZgUA== --container system --blob Microsoft.Compute/Images/vhds/cc15619p22lbv2-osDisk.1cf68388-ac67-4165-bec0-67341257d50a.vhd
+
+azure storage blob copy start https://cmucc.blob.core.windows.net/public/Microsoft.Compute/Images/vhds/cc15619p21dcv5-osDisk.e27faca3-f177-40ea-a740-9a1838326ae6.vhd  --dest-account-name zhangweiccproj --dest-account-key YktbOXHytQjJJeMXH7tZVMq0aOyoX2kqc41ZyTXTI/eK3i/NYJPSQ6IvRNBkroFerAol8sefXTa6WfeYDKZgUA== --dest-container system
+
+https://cc15319619.blob.core.windows.net/system/Microsoft.Compute/Images/vhds/cc15619p22lbv2-osDisk.1cf68388-ac67-4165-bec0-67341257d50a.vhd
+
+
+
+mvn compile && mvn exec:java -Dexec.mainClass="AzureVMApiDemo" -Dexec.args="ccproj zhangweiccproj cc15619p22dcv6-osDisk.b0c453f3-f75f-4a2d-bd9c-ae055b830124.vhd 05c30546-d097-45ba-8765-2de342b9ea0e d91c9061-f3aa-4e68-a16d-6ce3c872378e fb92184f-c631-47e4-8829-65db1201c6b4 myapp"
+
+LB:
+cloud-713775vm.eastus.cloudapp.azure.com
+
+LG:
+cloud-819944vm.eastus.cloudapp.azure.com

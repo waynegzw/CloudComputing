@@ -1,0 +1,25 @@
+./spark-ec2 -k myaws -i myaws.pem -s 10 --hadoop-major-version yarn --instance-type=r3.4xlarge --spot-price=0.4 launch pagerank
+./spark-ec2 -k myaws -i myaws.pem login sparktest
+
+ephemeral-hdfs/bin/hadoop dfs -mkdir /testinput
+ephemeral-hdfs/bin/hadoop dfs -put test.txt /testinput
+
+./spark/bin/spark-shell
+
+val textFile = sc.textFile("s3n://AKIAJ6YBUBK2XPA6OOAA:6AMo1KCQOuZHNk2tSq2pT0yoKoGVbGKjHrTvGTMW@cmucc-datasets/TwitterGraph.txt")
+
+val counts = textFile.flatMap(line => line.split(" ")(1)).map(word => word + " " + 1)).reduceByKey(_ + _)
+
+val edges = textFile.distinct.count
+edges: Long = 517970363
+
+val Vertices = textFile.flatMap(line => line.split("\\s+")).distinct().count()
+2315848
+
+Array((4,2), (6,1), (2,1), (3,1))
+Array[(Char, Int)] = Array((4,2), (6,1), (2,1), (3,1))
+
+spark/bin/spark-submit --class Follower follower.jar
+./spark/bin/spark-shell --driver-memory 120g
+
+bin/hadoop distcp s3n://cmucc-datasets/TwitterGraph.txt /input

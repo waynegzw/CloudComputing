@@ -1,0 +1,13 @@
+http://cclg-198470vm.eastus.cloudapp.azure.com/password?passwd=biBHvrqmuDoli419OsTyBnC8uY2E1dA4&andrewId=zhangweg
+
+http://cclg-499724vm.eastus.cloudapp.azure.com/test/horizontal?dns=ccdc-499724vm.eastus.cloudapp.azure.com
+
+http://http://cclg-866748vm.eastus.cloudapp.azure.com//test/horizontal/add?dns=ccdc-346802vm.eastus.cloudapp.azure.com
+
+http://ec2-54-209-152-155.compute-1.amazonaws.com/log?name=test.1454367549869.log
+
+azure group create  -f ./azuredeploy.json -e  ./azuredeploy.parameters.json -n ccasggroup -l "East US" --subscription 05c30546-d097-45ba-8765-2de342b9ea0e
+
+http://cclg-198470vm.eastus.cloudapp.azure.com/junior?dns=ccasg.eastus.cloudapp.azure.com
+
+ /heartbeat?lg=ec2-54-152-133-229.compute-1.amazonaws.com

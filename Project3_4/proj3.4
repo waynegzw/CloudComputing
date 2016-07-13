@@ -1,0 +1,26 @@
+GRANT ALL PRIVILEGES ON `%`.* TO socialnetwork@'%' IDENTIFIED BY '920404' WITH GRANT OPTION;
+
+mysql -h socialnetwork.clxfy9d49w0b.us-east-1.rds.amazonaws.com -u socialnetwork -psocialnetwork --local-infile=1;
+
+GRANT ALL ON `%`.* TO 'socialnetwork'@'%';
+
+CREATE TABLE `users` (
+  `userid` int(6),
+  `password` varchar(30),
+  PRIMARY KEY (`userid`)
+);
+
+CREATE TABLE `userinfo` (
+  `userid` int(6),
+  `name` varchar(30),
+  `profile_img` varchar(200),
+  PRIMARY KEY (`userid`)
+);
+
+LOAD DATA LOCAL INFILE 'users.csv' INTO TABLE users
+FIELDS TERMINATED BY ',';
+
+1,yaihala
+1,Aaliyah,https://cmucloudsocial.s3.amazonaws.com/profiles/9cc1886c5af388976e959787fa810c.png
+
+bin/hadoop org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.columns=HBASE_ROW_KEY,f:followers,f:followees -Dimporttsv.bulk.output=/storefileoutput socialnetwork /P3_4/out.csv

@@ -1,0 +1,6 @@
+*/.idea/*
+.idea/*
+.Ds_Store
+*.iml
+*/target/
+*/META-INF/* 

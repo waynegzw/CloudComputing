@@ -1,0 +1,53 @@
+sort -t$'\t' -k2,2nr -k1,1 part-r-00002 > 00002
+sort -t$'\t' -k2,2nr -k1,1 part-r-00003 > 00003
+sort -t$'\t' -k2,2nr -k1,1 part-r-00004 > 00004
+sort -t$'\t' -k2,2nr -k1,1 part-r-00005 > 00005
+sort -t$'\t' -k2,2nr -k1,1 part-r-00006 > 00006
+sort -t$'\t' -k2,2nr -k1,1 part-r-00007 > 00007
+sort -t$'\t' -k2,2nr -k1,1 part-r-00008 > 00008
+sort -t$'\t' -k2,2nr -k1,1 part-r-00009 > 00009
+sort -t$'\t' -k2,2nr -k1,1 part-r-00010 > 00010
+sort -t$'\t' -k2,2nr -k1,1 part-r-00011 > 00011
+sort -t$'\t' -k2,2nr -k1,1 part-r-00012 > 00012
+sort -t$'\t' -k2,2nr -k1,1 part-r-00013 > 00013
+sort -t$'\t' -k2,2nr -k1,1 part-r-00014 > 00014
+
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00000 > out00000
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00001 > out00001
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00002 > out00002
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00003 > out00003
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00004 > out00004
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00005 > out00005
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00006 > out00006
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00007 > out00007
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00008 > out00008
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00009 > out00009
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00010 > out00010
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00011 > out00011
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00012 > out00012
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00013 > out00013
+awk 'BEGIN{FS="\t"};{if(NR<=120) print}' 00014 > out00014
+
+cat * > outfile
+sort -t$'\t' -k2,2nr -k1,1 outfile > ngram
+
+bin/hadoop distcp s3://cmucc-datasets/enwiki-20160204-pages /input
+
+javac -classpath hadoop-common-2.4.0-amzn-3.jar:hadoop-mapreduce-client-core-2.4.0-amzn-3.jar:hadoop-mapreduce-client-common-2.4.0-amzn-3.jar -d ngram_classes Ngram.java
+
+jar -cvf ngram.jar -C ngram_classes/ .
+
+sudo javac -classpath hadoop-common-2.4.0-amzn-3.jar:hadoop-mapreduce-client-core-2.4.0-amzn-3.jar:hadoop-mapreduce-client-common-2.4.0-amzn-3.jar:hbase-0.94.18.jar -d model_classes/ LanguageModel.java
+
+jar -cvf model.jar -C model_classes/ .
+
+hadoop jar ngram.jar Ngram /input /output
+
+hadoop jar model.jar LanguageModel /output 2 5
+
+CREATE EXTERNAL TABLE phrasecount(phrase STRING, counts INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LOCATION '/output/';
+
+//load data inpath '/data' overwrite into table phrasecount;
+
+impala-shell -o ~/ngrams --output_delimiter="\t" -q "select * from phraseCount order by counts DESC, phrase limit 100"
+hive -e "select * from phraseCount2 order by counts DESC, phrase limit 100" > ~/ngrams

@@ -1,0 +1,61 @@
+; MSB Senior System Architect Test
+; Test launched. Please check every minute for update.
+[Test Start]
+time=2016-02-13 10:07:30
+type=Senior
+testId=1455358050030
+testFile=test.1455358050030.log
+
+[Minute 1]
+rps=42.10
+
+[Minute 2]
+rps=38.00
+
+[Minute 3]
+rps=37.70
+
+[Minute 4]
+rps=38.30
+
+[Minute 5]
+rps=38.40
+
+[Minute 6]
+rps=38.70
+
+[Minute 7]
+rps=16.62
+
+[Minute 8]
+rps=40.40
+
+[Minute 9]
+rps=41.30
+
+[Minute 10]
+rps=38.00
+
+[Minute 11]
+rps=37.60
+
+[Minute 12]
+rps=43.30
+
+[Minute 13]
+rps=16.67
+
+[Minute 14]
+rps=40.50
+
+[Minute 15]
+rps=41.20
+
+[Minute 16]
+rps=43.00
+
+[Minute 17]
+rps=43.00
+
+[Minute 18]
+rps=38.50

@@ -1,0 +1,43 @@
+mysql -u root -pdb15319root song_db
+
+mysql --local-infile -u root -pdb15319root song_db
+
+DROP TABLE table_name;
+
+LOAD DATA LOCAL INFILE 'million_songs_metadata.csv' INTO TABLE songs
+FIELDS TERMINATED BY ',';
+
+
+LOAD DATA LOCAL INFILE 'million_songs_sales_data.csv' INTO TABLE sales
+FIELDS TERMINATED BY ',';
+
+CREATE INDEX duration_index ON songs(duration);
+
+sudo parted -l
+sudo mkfs.ext4 /dev/xvdf
+sudo mkdir /storage/ebs1
+sudo mount /dev/xvdf /storage/ebs1
+cd /storage/ebs1/
+df -h
+sudo /home/ubuntu/Project3_1/sysbench --test=fileio --file-total-size=10G prepare
+sudo /home/ubuntu/Project3_1/sysbench --test=fileio --file-total-size=10G --file-test-mode=rndrw --max-time=300 --max-requests=0 run
+sudo umount /dev/xvdf
+
+The RPS varies because of the local momery of the instances. The local memory caches the data the first time. So when request the same data again, the instance will return the data stored in the memory instead of going to the disk which is much slower. Thus, when testing several times, the RPS will increase.
+t1.micro does not vary as much as m3.large, because it has smaller memory then m3.large, thus the amount of data cached is limited.
+
+hadoop fs -put P3_1/ /
+
+import data into Hbase:
+bin/hadoop org.apache.hadoop.hbase.mapreduce.ImportTsv '-Dimporttsv.separator=,' -Dimporttsv.columns=HBASE_ROW_KEY,data:title,data:song_id,data:release,data:artist_id,data:artist_mbid,data:artist_name,data:duration,data:artist_familiarity,data:artist_hotttnesss,data:year -Dimporttsv.bulk.output=/storefileoutput songdata /P3_1/million_songs_metadata.csv
+
+load data:
+hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles /storefileoutput songdata
+
+scan 'songdata', {COLUMNS => ['data:artist_name', 'data:title'], FILTER => "SingleColumnValueFilter('data', 'title', = , 'regexstring:^Total.*Water$')"}
+
+scan 'songdata', {COLUMNS => ['data:artist_name', 'data:title'], FILTER => "SingleColumnValueFilter('data', 'artist_name', = , 'regexstring:Kanye West') AND SingleColumnValueFilter('data', 'title', =, 'regexstring:^(Apologies|Confessions)')"}
+
+scan 'songdata', {COLUMNS => ['data:title','data:artist_name', 'data:duration', 'data:year'], FILTER => "SingleColumnValueFilter('data', 'artist_name', = , 'regexstring:^Bob Marley.*') AND SingleColumnValueFilter('data', 'duration', >=, 'binaryprefix:400') AND SingleColumnValueFilter('data', 'year', >, 'binary:2000')"}
+
+{STARTROW => 'userid', ENDROW => 'userid+1', COLUMNS => ['data:artist_name', 'data:title'], FILTER => "SingleColumnValueFilter('data', 'title', = , 'regexstring:^Total.*Water$')"}

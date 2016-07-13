@@ -1,0 +1,5 @@
+mvn install
+sudo java -jar project2_2.jar
+sudo java -cp target/cloudproj2_2-1.0-SNAPSHOT-jar-with-dependencies.jar Main
+
+scp -r HealthCheck ubuntu@cloud-713775vm.eastus.cloudapp.azure.com:~
